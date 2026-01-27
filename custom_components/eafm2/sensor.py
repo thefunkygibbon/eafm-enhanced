@@ -2,6 +2,7 @@
 import logging
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
 from . import aioeafm_local as aioeafm
 
 _LOGGER = logging.getLogger(__name__)
@@ -13,14 +14,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
     
     try:
         station = await aioeafm.get_station(session, station_ref)
-        measures = station.measures
         
-        if not measures:
-            _LOGGER.warning("Station %s has no measures available", station_ref)
+        # Check if we actually got measures back
+        if not station.measures:
+            _LOGGER.warning("Station %s found, but no measures (sensors) were listed in the API response", station_ref)
             return
 
-        entities = [EafmSensor(station, m) for m in measures]
+        entities = [EafmSensor(station, measure) for measure in station.measures]
         async_add_entities(entities, True)
+        
     except Exception as err:
         _LOGGER.error("Error setting up sensors for %s: %s", station_ref, err)
 
@@ -31,14 +33,16 @@ class EafmSensor(SensorEntity):
         self._station = station
         self._measure = measure
         
-        # Identity
+        # Naming: "Station Name - Level"
         self._attr_name = f"{station.label} {measure.label}"
-        self._attr_unique_id = f"{station.station_reference}_{measure.parameter}_{measure.data.get('qualifier', '')}"
+        # Unique ID: "StationRef_Parameter_Qualifier"
+        self._attr_unique_id = f"{station.station_reference}_{measure.data.get('parameter', 'unknown')}_{measure.data.get('qualifier', '')}"
         
-        # Get the value safely
+        # Extract the reading value
         reading = measure.data.get("latestReading")
         if isinstance(reading, dict):
             self._state = reading.get("value")
+            # If the reading date is needed later, it is reading.get("dateTime")
         else:
             self._state = None
             
@@ -55,7 +59,3 @@ class EafmSensor(SensorEntity):
             "river": self._station.data.get("riverName"),
             "qualifier": self._measure.data.get("qualifier")
         }
-
-    async def async_update(self):
-        """Update logic can be added later if needed."""
-        pass
