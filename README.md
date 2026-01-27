@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-This is a custom Home Assistant integration for the UK Environment Agency (EA) flood monitoring API. It is a "Fixed" version of the built-in `eafm` integration, designed to solve the common problem of ambiguous station names.
+This is a custom Home Assistant integration for the UK Environment Agency (EA) flood monitoring API. It is a "Fixed" version of the built-in `eafm` integration, designed to solve the common problem of ambiguous station names which in turn caused stations to be missing from the list.   
 
 ## 🚀 The Fix: Catchment Awareness
 The official integration only shows the **Station Label** when you are setting it up. If you live near a "St Ives," "Bridge End," or "Mill House," you might see 3 or 4 identical names with no way to tell which one is yours.
