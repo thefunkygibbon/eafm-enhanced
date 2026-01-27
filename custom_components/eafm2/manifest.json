@@ -1,0 +1,11 @@
+{
+  "domain": "eafm2",
+  "name": "Environment Agency Flood Gauges Fixed",
+  "codeowners": ["@thefunkygibbon"],
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/eafm",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "version": "1.0.1",
+  "requirements": []
+}

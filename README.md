@@ -1,31 +1,42 @@
-# aioeafm
+# Environment Agency Flood Gauges Fixed (eafm2)
 
-This is a thin wrapper for the [Real Time flood monitoring API](https://environment.data.gov.uk/flood-monitoring/doc/reference).
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-This wrapper is built for home-assistant. We target the same python versions as home-assistant and follow similar code style guidelines.
+This is a custom Home Assistant integration for the UK Environment Agency (EA) flood monitoring API. It is a "Fixed" version of the built-in `eafm` integration, designed to solve the common problem of ambiguous station names.
 
-```bash
-pip install aioeafm
-```
+## 🚀 The Fix: Catchment Awareness
+The official integration only shows the **Station Label** when you are setting it up. If you live near a "St Ives," "Bridge End," or "Mill House," you might see 3 or 4 identical names with no way to tell which one is yours.
 
-You can get a list of monitoring stations with:
+**This version adds the Catchment Name to the selection list.**
 
-```python
-from aioeafm import get_stations
-import aiohttp
+- **Before:** `St Ives` | `St Ives`
+- **After:** `St Ives (Great Ouse)` | `St Ives (Cornwall)`
 
+## ✨ Key Features
+- **Catchment Identity:** See exactly which river system a station belongs to during setup.
+- **Self-Contained:** Uses a bundled version of the `aioeafm` library, ensuring stability and independence from upstream dependency changes.
+- **Side-by-Side Install:** Uses the domain `eafm2`, so you can keep the official integration installed while you test this version.
 
-async with aiohttp.ClientSession() as session:
-    print(await get_stations(session))
-```
+## 🛠 Installation
 
-And you can get the current data for that station with:
+### Option 1: HACS (Recommended)
+1. Open **HACS** in Home Assistant.
+2. Click the three dots in the top right corner and select **Custom repositories**.
+3. Paste the URL of this GitHub repository.
+4. Select **Integration** as the category and click **Add**.
+5. Find "Environment Agency Flood Gauges Fixed" in the HACS list and click **Download**.
+6. **Restart Home Assistant.**
 
-```python
-from aioeafm import get_station
-import aiohttp
+### Option 2: Manual
+1. Download the `eafm2` folder from `custom_components/` in this repo.
+2. Copy it into your Home Assistant `/config/custom_components/` directory.
+3. **Restart Home Assistant.**
 
+## ⚙️ Configuration
+1. Go to **Settings** -> **Devices & Services**.
+2. Click **Add Integration**.
+3. Search for **Environment Agency Flood Gauges Fixed**.
+4. Select your station from the newly clarified list!
 
-async with aiohttp.ClientSession() as session:
-    print(await get_station(session, "1491TH"))
-```
+---
+*Note: This integration is based on the original work by @Jc2k in the Home Assistant Core repository but has been modified to enhance user experience during setup.*
