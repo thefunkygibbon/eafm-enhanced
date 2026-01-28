@@ -1,8 +1,8 @@
-# 🌊 EAFM2: Environment Agency Flood Monitoring (Enhanced)
+# 🌊 EAFM-Enhanced: Environment Agency Flood Monitoring (Enhanced)
 
-**EAFM2** is a feature-rich, "context-aware" fork of the official Home Assistant Environment Agency integration.
+**EAFME** is a feature-rich, "context-aware" fork of the official Home Assistant Environment Agency integration.
 
-While the original integration provides essential raw data, **EAFM2** is designed to provide actionable intelligence—telling you not just *how high* the river is, but what that level actually means for your local area.
+While the original integration provides essential raw data, **EAFME** is designed to provide actionable intelligence—telling you not just *how high* the river is, but what that level actually means for your local area.
 
 ---
 
