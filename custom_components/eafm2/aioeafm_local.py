@@ -49,6 +49,9 @@ class Station(Base):
 
 async def get_stations(session: aiohttp.ClientSession, **kwargs) -> List[Station]:
     """Get all stations (for the config flow list)."""
+    # FIX: Default to 'Active' stations only so we don't see closed ones
+    kwargs.setdefault("status", "Active")
+    
     url = "https://environment.data.gov.uk/flood-monitoring/id/stations"
     async with session.get(url, params=kwargs) as response:
         res_json = await response.json()
