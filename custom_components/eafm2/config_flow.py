@@ -39,12 +39,18 @@ class EafmConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
 
         # Build the dropdown list for the UI
-        stations_dropdown = {
-            station.station_reference: f"{station.label} ({station.catchment_name})"
-            for station in all_stations
-        }
+        stations_dropdown = {}
+        for station in all_stations:
+            # We build the string: "Label, Catchment (ID)"
+            # We use .get() or a fallback just in case some data is missing
+            display_name = f"{station.label}, {station.catchment_name}"
+            
+            if station.rloi_id:
+                display_name += f" ({station.rloi_id})"
+            
+            stations_dropdown[station.station_reference] = display_name
         
-        # Sort them alphabetically
+        # Sort them alphabetically by the new display name
         sorted_stations = dict(sorted(stations_dropdown.items(), key=lambda item: item[1]))
 
         return self.async_show_form(

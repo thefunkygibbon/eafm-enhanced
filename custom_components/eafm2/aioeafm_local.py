@@ -34,17 +34,15 @@ class Station(Base):
         return self.data.get("catchmentName", "Unknown Catchment")
 
     @property
+    def rloi_id(self):
+        # This grabs the "RLOIid" from the JSON you provided
+        return self.data.get("RLOIid")
+
+    @property
     def measures(self):
-        # We need to be careful here. The API might return a list or a single item.
-        m_data = self.data.get("measures", [])
-        
-        if isinstance(m_data, list):
-            return [Measure(m) for m in m_data]
-        
-        # Sometimes (rarely) it returns a single dict instead of a list
-        if isinstance(m_data, dict):
-            return [Measure(m_data)]
-            
+        m_list = self.data.get("measures", [])
+        if isinstance(m_list, list):
+            return [Measure(m) for m in m_list]
         return []
 
 async def get_stations(session: aiohttp.ClientSession, **kwargs) -> List[Station]:
