@@ -5,12 +5,14 @@
 This is a custom Home Assistant integration for the UK Environment Agency (EA) flood monitoring API. It is a "Fixed" version of the built-in `eafm` integration, designed to solve the common problem of ambiguous station names which in turn caused stations to be missing from the list.   
 
 ## 🚀 The Fix: Catchment Awareness
-The official integration only shows the **Station Label** when you are setting it up. If you live near a "St Ives," "Bridge End," or "Mill House," you might see 3 or 4 identical names with no way to tell which one is yours.
+The official integration only shows the **Station Label** when you are setting it up. If you live near a "St Ives," "Bridge End," for example, you would only see one in the list and have no idea which one it is.
 
 **This version adds the Catchment Name to the selection list.**
 
-- **Before:** `St Ives` | `St Ives`
+- **Before:** `St Ives`
 - **After:** `St Ives (Great Ouse)` | `St Ives (Cornwall)`
+
+Therefore it will actually now list out all of the versions of that named Station. 
 
 ## ✨ Key Features
 - **Catchment Identity:** See exactly which river system a station belongs to during setup.
