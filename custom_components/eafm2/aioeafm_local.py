@@ -35,16 +35,23 @@ class Station(Base):
 
     @property
     def rloi_id(self):
-        # This grabs the "RLOIid" from the JSON you provided
         return self.data.get("RLOIid")
 
     @property
-    def measures(self):
-        m_list = self.data.get("measures", [])
-        if isinstance(m_list, list):
-            return [Measure(m) for m in m_list]
-        return []
+    def stage_scale(self):
+        # This gets the scale dictionary which contains the high/low thresholds
+        scale = self.data.get("stageScale")
+        return scale if isinstance(scale, dict) else {}
 
+    @property
+    def measures(self):
+        m_data = self.data.get("measures", [])
+        if isinstance(m_data, list):
+            return [Measure(m) for m in m_data]
+        if isinstance(m_data, dict):
+            return [Measure(m_data)]
+        return []
+    
 async def get_stations(session: aiohttp.ClientSession, **kwargs) -> List[Station]:
     """Get all stations (for the config flow list)."""
     # FIX: Default to 'Active' stations only so we don't see closed ones
