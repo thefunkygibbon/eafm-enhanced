@@ -1,44 +1,76 @@
-# Environment Agency Flood Gauges Fixed (eafm2)
+# 🌊 EAFM2: Environment Agency Flood Monitoring (Enhanced)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
+**EAFM2** is a feature-rich, "context-aware" fork of the official Home Assistant Environment Agency integration.
 
-This is a custom Home Assistant integration for the UK Environment Agency (EA) flood monitoring API. It is a "Fixed" version of the built-in `eafm` integration, designed to solve the common problem of ambiguous station names which in turn caused stations to be missing from the list.   
-
-## 🚀 The Fix: Catchment Awareness
-The official integration only shows the **Station Label** when you are setting it up. If you live near a "St Ives," "Bridge End," for example, you would only see one in the list and have no idea which one it is.
-
-**This version adds the Catchment Name to the selection list.**
-
-- **Before:** `St Ives`
-- **After:** `St Ives (Great Ouse)` | `St Ives (Cornwall)`
-
-Therefore it will actually now list out all of the versions of that named Station. 
-
-## ✨ Key Features
-- **Catchment Identity:** See exactly which river system a station belongs to during setup.
-- **Self-Contained:** Uses a bundled version of the `aioeafm` library, ensuring stability and independence from upstream dependency changes.
-- **Side-by-Side Install:** Uses the domain `eafm2`, so you can keep the official integration installed while you test this version.
-
-## 🛠 Installation
-
-### Option 1: HACS (Recommended)
-1. Open **HACS** in Home Assistant.
-2. Click the three dots in the top right corner and select **Custom repositories**.
-3. Paste the URL of this GitHub repository.
-4. Select **Integration** as the category and click **Add**.
-5. Find "Environment Agency Flood Gauges Fixed" in the HACS list and click **Download**.
-6. **Restart Home Assistant.**
-
-### Option 2: Manual
-1. Download the `eafm2` folder from `custom_components/` in this repo.
-2. Copy it into your Home Assistant `/config/custom_components/` directory.
-3. **Restart Home Assistant.**
-
-## ⚙️ Configuration
-1. Go to **Settings** -> **Devices & Services**.
-2. Click **Add Integration**.
-3. Search for **Environment Agency Flood Gauges Fixed**.
-4. Select your station from the newly clarified list!
+While the original integration provides essential raw data, **EAFM2** is designed to provide actionable intelligence—telling you not just *how high* the river is, but what that level actually means for your local area.
 
 ---
-*Note: This integration is based on the original work by @Jc2k in the Home Assistant Core repository but has been modified to enhance user experience during setup.*
+
+## 🚀 Key Improvements in this Fork
+
+### 1. 🆔 Fix: Duplicate Station Support
+
+The original integration can struggle with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration often only displays one, or fails to list the second.
+
+* **The EAFM2 Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.
+
+### 2. 🚦 Automated "River Status" Sensor
+
+We've added a dedicated "Status" entity that categorizes the river's health in real-time:
+
+* 🟢 **Normal**: Water levels are within the expected seasonal range.
+* 🔴 **High**: Levels have exceeded the typical high threshold for this specific gauge.
+* 🟡 **Low**: Levels are below the typical low threshold.
+
+### 3. 🔍 Deep Metadata Fetching
+
+EAFM2 doesn't just scrape the surface. It follows secondary API links to find "Stage Scale" data, providing you with:
+
+* **Typical High/Low Thresholds** (now available as attributes).
+* **Highest Recent Reading** (compare today's level to the last major flood).
+
+---
+
+## 🛠 Why Use This Over the Standard Version?
+
+| Feature | Standard Integration | **EAFM2 (This Fork)** |
+| --- | --- | --- |
+| **Raw Water Levels** | ✅ | ✅ |
+| **Handle Duplicate Names** | ❌ | ✅ |
+| **River Status** (Normal/High/Low) | ❌ | ✅ |
+| **Detailed Configuration** | Label Only | Label + Catchment + ID |
+| **Typical Range Attributes** | ❌ | ✅ |
+
+---
+
+## ⚙️ Installation & Setup
+
+1. **HACS:** Add this URL as a **Custom Repository** (Category: Integration).
+2. **Install & Restart:** Download via HACS and restart Home Assistant.
+3. **Configure:** Go to **Settings > Devices & Services > Add Integration** and search for **EAFM2**.
+
+---
+
+## 🙏 Credits & Acknowledgments
+
+This project is a fork of the core [Environment Agency Flood Gauges](https://www.home-assistant.io/integrations/eafm/) integration.
+
+* **Original Integration Author:** [Andrew Goddard (@Jc2k)](https://github.com/Jc2k).
+* **Underlying Library:** Based on the `aioeafm` Python library.
+* **Data Source:** This integration uses [Environment Agency flood and river level data](https://environment.data.gov.uk/flood-monitoring/doc/reference) from the real-time data API.
+
+---
+
+### 📝 Legal & Disclaimer
+
+This integration is provided for informational purposes only. Data is sourced from the Environment Agency API (Open Government Licence v3.0). **Never rely solely on a smart home integration for life-safety decisions.** Always refer to the official [Check for Flooding](https://check-for-flooding.service.gov.uk/) service.
+
+---
+
+### Pro Dashboard Tip
+
+You can now create a **Badge** on your Home Assistant dashboard that changes color based on the `sensor.[station]_river_status`. It makes it incredibly easy to see if you need to check the river at a single glance.
+
+[Customizing Home Assistant Dashboards](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3DkwLp99s_9Wc)
+
+This video provides a great overview of how to customize your Home Assistant dashboard with custom sensors and states, perfect for making the most of your new River Status sensor.
