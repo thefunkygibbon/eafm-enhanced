@@ -1,4 +1,4 @@
-"""The Environment Agency Flood Gauges Fixed integration."""
+"""The Environment Agency Flood Monitoring Enhanced integration."""
 import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -11,7 +11,7 @@ PLATFORMS = [Platform.SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up EAFM2 from a config entry."""
-    _LOGGER.debug("Setting up eafm2 entry: %s", entry.title)
+    _LOGGER.debug("Setting up EAFM-Enhanced entry: %s", entry.title)
     
     # This is the line HA was looking for. It forwards the setup to sensor.py
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

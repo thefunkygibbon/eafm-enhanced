@@ -1,4 +1,4 @@
-"""Config flow for Environment Agency Flood Gauges Fixed."""
+"""Config flow for Environment Agency Flood Monitoring Enhanced."""
 import aiohttp
 import voluptuous as vol
 
