@@ -1,6 +1,6 @@
 {
   "domain": "eafm-enhanced",
-  "name": "Environment Agency Flood Gauges Fixed",
+  "name": "Environment Agency Flood Monitoring Enhanced",
   "codeowners": ["@thefunkygibbon"],
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/eafm",
