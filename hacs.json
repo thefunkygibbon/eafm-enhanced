@@ -1,8 +1,5 @@
 {
   "name": "Environment Agency Flood Gauges (Enhanced)",
-  "content_type": "integration",
   "homeassistant": "2024.1.0",
-  "iot_class": "cloud_polling",
-  "render_readme": true,
   "country": "GB"
 }
