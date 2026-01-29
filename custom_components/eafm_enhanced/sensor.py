@@ -1,6 +1,6 @@
 import logging
 from datetime import timedelta
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (SensorEntity, SensorStateClass)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from . import aioeafm_local as aioeafm
 
@@ -31,6 +31,8 @@ class EafmSensor(SensorEntity):
         self._station_ref = station_ref
         self._measure_id = measure.data.get("@id")
         self._station = initial_station
+        self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_native_unit_of_measurement = measure.data.get("unitName", "m")
         
         # Identity
         measure_label = measure.data.get('qualifier', 'Level')
