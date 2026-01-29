@@ -40,18 +40,23 @@ class EafmSensor(SensorEntity):
         self._measure_id = measure.data.get("@id")
         self._station = initial_station
         
-        # 1. Identity & Naming
+        # 1. Identity & Unique Naming
         m_label = measure.data.get('qualifier', 'Level')
-        self._attr_name = f"{initial_station.label} {m_label}"
+        api_unit = measure.data.get("unitName")
+        
+        # We add the unit to the name to differentiate mAOD/mASD at the same station
+        unit_suffix = f" ({api_unit})" if api_unit else ""
+        self._attr_name = f"{initial_station.label} {m_label}{unit_suffix}"
+        
+        # Unique ID must stay unique based on the API's measure ID
         self._attr_unique_id = f"{station_ref}_{self._measure_id}"
         self._attr_icon = "mdi:waves"
         self._state = None
 
-        # 2. Graph Fix: Set Unit and State Class
-        # Uses mASD/mAOD from API, falls back to 'm' if missing
-        api_unit = measure.data.get("unitName")
+        # 2. Graph Fix & Precision
         self._attr_native_unit_of_measurement = api_unit if api_unit else "m"
         self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_suggested_display_precision = 2
 
     @property
     def device_info(self):
