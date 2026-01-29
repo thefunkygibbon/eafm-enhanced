@@ -1,5 +1,5 @@
 {
-  "domain": "eafm-enhanced",
+  "domain": "eafm_enhanced",
   "name": "Environment Agency Flood Monitoring Enhanced",
   "codeowners": ["@thefunkygibbon"],
   "config_flow": true,
@@ -8,7 +8,7 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/thefunkygibbon/eafm-enhanced/issues",
   "requirements": [],
-  "version": "2.0.5"
+  "version": "2.0.6"
 
 
 
