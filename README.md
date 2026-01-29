@@ -1,8 +1,8 @@
 # 🌊 EAFM-Enhanced: Environment Agency Flood Monitoring (Enhanced)
 
-**EAFME** is a feature-rich, "context-aware" fork of the official Home Assistant Environment Agency integration.
+**EAFME** is a feature-rich, fork of the official Home Assistant Environment Agency integration.
 
-While the original integration provides essential raw data, **EAFME** is designed to provide actionable intelligence—telling you not just *how high* the river is, but what that level actually means for your local area.
+While the original integration provides essential raw data, it could not support monitoring stations if they shared a name with other ones, which account for 8% of the total list.  **EAFME** is designed to provide actionable intelligence—telling you not just *how high* the river is, but what that level actually means for your local area.
 
 ---
 
@@ -12,7 +12,7 @@ While the original integration provides essential raw data, **EAFME** is designe
 
 The original integration can struggle with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration often only displays one, or fails to list the second.
 
-* **The EAFM2 Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.
+* **The EAFM2 Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
 
 ### 2. 🚦 Automated "River Status" Sensor
 
@@ -24,7 +24,7 @@ We've added a dedicated "Status" entity that categorizes the river's health in r
 
 ### 3. 🔍 Deep Metadata Fetching
 
-EAFM2 doesn't just scrape the surface. It follows secondary API links to find "Stage Scale" data, providing you with:
+EAFME doesn't just scrape the surface. It follows secondary API links to find "Stage Scale" data, providing you with:
 
 * **Typical High/Low Thresholds** (now available as attributes).
 * **Highest Recent Reading** (compare today's level to the last major flood).
