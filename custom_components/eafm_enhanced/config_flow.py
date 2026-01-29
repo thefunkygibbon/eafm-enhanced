@@ -18,11 +18,19 @@ class EafmConfigFlow(config_entries.ConfigFlow, domain="eafm_enhanced"):
         errors = {}
 
         if user_input is not None:
+            # We need the station object to get the Label and RLOI for the title
+            session = async_get_clientsession(self.hass)
+            station = await aioeafm.get_station(session, user_input["station"])
+            
+            # Formatting the title: Label (RLOIid)
+            name_id = station.rloi_id if station and station.rloi_id else user_input["station"]
+            display_title = f"{station.label} ({name_id})" if station else f"Station {user_input['station']}"
+
             await self.async_set_unique_id(user_input["station"])
             self._abort_if_unique_id_configured()
 
             return self.async_create_entry(
-                title=f"Station {user_input['station']}", 
+                title=display_title, 
                 data=user_input
             )
 

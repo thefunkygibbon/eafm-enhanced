@@ -34,6 +34,18 @@ class Station:
         return scale if isinstance(scale, dict) else {}
 
     @property
+    def highest_recent(self):
+        """Get the highest recent reading value."""
+        hr = self.stage_scale.get("highestRecent", {})
+        return hr.get("value") if isinstance(hr, dict) else None
+
+    @property
+    def highest_recent_date(self):
+        """Get the date/time of the highest recent reading."""
+        hr = self.stage_scale.get("highestRecent", {})
+        return hr.get("dateTime") if isinstance(hr, dict) else None
+
+    @property
     def measures(self):
         m_list = self.data.get("measures", [])
         if isinstance(m_list, list):
