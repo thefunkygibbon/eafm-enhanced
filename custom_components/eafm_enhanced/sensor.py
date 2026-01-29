@@ -1,4 +1,4 @@
-"""Support for Environment Agency Flood Monitoring sensors."""
+"""Support for EAFM-Enhanced sensors."""
 import logging
 from datetime import timedelta
 
@@ -8,47 +8,53 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from . import aioeafm_local as aioeafm
 
 _LOGGER = logging.getLogger(__name__)
+
+# This tells Home Assistant to run the update() loop every 15 minutes
 SCAN_INTERVAL = timedelta(minutes=15)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the sensors via the config entry."""
     session = async_get_clientsession(hass)
     station_ref = entry.data["station"]
-    
-    try:
-        station = await aioeafm.get_station(session, station_ref)
-        
-        if not station or not station.measures:
-            _LOGGER.warning("Station %s found, but no measures were listed", station_ref)
-            return
 
-        entities = []
-        
-        # 1. Add standard level/flow sensors
-        for measure in station.measures:
-            entities.append(EafmSensor(station, measure))
-            
-        # 2. Add the Status Sensor (Normal/High/Low)
-        # Check if stage_scale is a dict and not empty
-        if hasattr(station, 'stage_scale') and station.stage_scale:
-            entities.append(EafmStatusSensor(station))
-            
-        async_add_entities(entities, True)
-    except Exception as err:
-        _LOGGER.error("Error setting up sensors for %s: %s", station_ref, err)
+    # Initial fetch to build the sensors
+    station = await aioeafm.get_station(session, station_ref)
+
+    if not station or not station.measures:
+        _LOGGER.error("Could not find measures for station %s", station_ref)
+        return
+
+    entities = []
+
+    # 1. Create a sensor for every measure (Level, Flow, etc)
+    for measure in station.measures:
+        entities.append(EafmSensor(session, station_ref, measure, station))
+
+    # 2. Create the Status Sensor (Normal/High/Low)
+    if station.stage_scale:
+        entities.append(EafmStatusSensor(session, station_ref, station))
+
+    # The 'True' here triggers an immediate update
+    async_add_entities(entities, True)
+
 
 class EafmSensor(SensorEntity):
-    """Standard level/flow sensor."""
+    """Standard sensor for River Level / Flow."""
 
-    def __init__(self, station, measure):
-        self._station = station
-        self._measure = measure
-        self._attr_name = f"{station.label} {measure.label}"
-        self._attr_unique_id = f"{station.station_reference}_{measure.data.get('parameter', 'unknown')}_{measure.data.get('qualifier', '')}"
+    def __init__(self, session, station_ref, measure, initial_station):
+        self._session = session
+        self._station_ref = station_ref
+        self._measure_id = measure.data.get("@id")
         
-        reading = measure.data.get("latestReading")
-        self._state = reading.get("value") if isinstance(reading, dict) else None
+        # Identity
+        self._attr_name = f"{initial_station.label} {measure.data.get('qualifier', 'Level')}"
+        self._attr_unique_id = f"{station_ref}_{self._measure_id}"
         self._attr_native_unit_of_measurement = measure.data.get("unitName")
+        self._attr_icon = "mdi:waves"
+        
+        # Store initial data
+        self._station = initial_station
+        self._state = None
 
     @property
     def native_value(self):
@@ -57,19 +63,40 @@ class EafmSensor(SensorEntity):
     @property
     def extra_state_attributes(self):
         return {
-            "catchment": self._station.catchment_name,
             "river": self._station.data.get("riverName"),
-            "qualifier": self._measure.data.get("qualifier")
+            "catchment": self._station.catchment_name,
+            "station_url": f"https://check-for-flooding.service.gov.uk/station/{self._station_ref}"
         }
 
-class EafmStatusSensor(SensorEntity):
-    """A sensor that reports the 'State' of the river (Normal, High, Low)."""
+    async def async_update(self):
+        """Fetch new state data for the sensor."""
+        try:
+            # Re-fetch the station data
+            self._station = await aioeafm.get_station(self._session, self._station_ref)
+            
+            # Find the specific measure in the fresh data
+            for m in self._station.measures:
+                if m.data.get("@id") == self._measure_id:
+                    reading = m.data.get("latestReading")
+                    if isinstance(reading, dict):
+                        self._state = reading.get("value")
+                    break
+        except Exception as err:
+            _LOGGER.error("Error updating sensor %s: %s", self.entity_id, err)
 
-    def __init__(self, station):
-        self._station = station
-        self._attr_name = f"{station.label} River Status"
-        self._attr_unique_id = f"{station.station_reference}_status"
-        self._attr_icon = "mdi:waves"
+
+class EafmStatusSensor(SensorEntity):
+    """Sensor for 'Normal', 'High', 'Low' status."""
+
+    def __init__(self, session, station_ref, initial_station):
+        self._session = session
+        self._station_ref = station_ref
+        
+        self._attr_name = f"{initial_station.label} River Status"
+        self._attr_unique_id = f"{station_ref}_status"
+        self._attr_icon = "mdi:alert-circle-check-outline"
+        
+        self._station = initial_station
         self._state = "Unknown"
 
     @property
@@ -77,36 +104,40 @@ class EafmStatusSensor(SensorEntity):
         return self._state
 
     async def async_update(self):
-        """Determine the status by comparing current level to typical range."""
-        scale = self._station.stage_scale
-        if not isinstance(scale, dict):
-            return
+        """Fetch new data and calculate status."""
+        try:
+            # Re-fetch station data
+            self._station = await aioeafm.get_station(self._session, self._station_ref)
+            scale = self._station.stage_scale
+            high = scale.get("typicalRangeHigh")
+            low = scale.get("typicalRangeLow")
 
-        high = scale.get("typicalRangeHigh")
-        low = scale.get("typicalRangeLow")
-        
-        current_level = None
-        for m in self._station.measures:
-            if m.data.get("parameter") == "level":
-                reading = m.data.get("latestReading")
-                if isinstance(reading, dict):
-                    current_level = reading.get("value")
-                break
+            # Find current level
+            current_level = None
+            for m in self._station.measures:
+                if m.data.get("parameter") == "level":
+                    reading = m.data.get("latestReading")
+                    if isinstance(reading, dict):
+                        current_level = reading.get("value")
+                    break
 
-        if current_level is None or high is None or low is None:
-            self._state = "Unknown"
-        elif current_level > high:
-            self._state = "High"
-        elif current_level < low:
-            self._state = "Low"
-        else:
-            self._state = "Normal"
+            # Calculate Logic
+            if current_level is None or high is None:
+                self._state = "Unknown"
+            elif current_level > high:
+                self._state = "High"
+            elif low and current_level < low:
+                self._state = "Low"
+            else:
+                self._state = "Normal"
 
+        except Exception as err:
+            _LOGGER.error("Error updating status for %s: %s", self.entity_id, err)
+    
     @property
     def extra_state_attributes(self):
         scale = self._station.stage_scale
         return {
             "typical_range_high": scale.get("typicalRangeHigh"),
-            "typical_range_low": scale.get("typicalRangeLow"),
-            "highest_recent": scale.get("highestRecent", {}).get("value") if isinstance(scale.get("highestRecent"), dict) else None
+            "typical_range_low": scale.get("typicalRangeLow")
         }

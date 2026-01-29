@@ -50,5 +50,12 @@ async def get_station(session: aiohttp.ClientSession, station_id: str):
     url = f"https://environment.data.gov.uk/flood-monitoring/id/stations/{station_id}"
     async with session.get(url) as response:
         json_data = await response.json()
-        item = json_data.get("items")
-        return Station(item) if item else None
+        items = json_data.get("items")
+        
+        # Robust handling: If it's a list, grab the first. If it's a dict, use it.
+        if isinstance(items, list) and len(items) > 0:
+            return Station(items[0])
+        elif isinstance(items, dict):
+            return Station(items)
+            
+        return None
