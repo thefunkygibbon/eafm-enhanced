@@ -47,7 +47,7 @@ EAFME doesn't just scrape the surface. It follows secondary API links to find "S
 
 1. **HACS:** Add this URL as a **Custom Repository** (Category: Integration).
 2. **Install & Restart:** Download via HACS and restart Home Assistant.
-3. **Configure:** Go to **Settings > Devices & Services > Add Integration** and search for **EAFM2**.
+3. **Configure:** Go to **Settings > Devices & Services > Add Integration** and search for **eafm enhanced**.
 
 ---
 
