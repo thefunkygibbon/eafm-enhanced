@@ -12,7 +12,7 @@ While the original integration provides essential raw data, it could not support
 
 The original integration can struggle with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration often only displays one, or fails to list the second.
 
-* **The EAFM2 Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
+* **The EAFME Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
 
 ### 2. 🚦 Automated "River Status" Sensor
 
@@ -33,7 +33,7 @@ EAFME doesn't just scrape the surface. It follows secondary API links to find "S
 
 ## 🛠 Why Use This Over the Standard Version?
 
-| Feature | Standard Integration | **EAFM2 (This Fork)** |
+| Feature | Standard Integration | **EAFME (This Fork)** |
 | --- | --- | --- |
 | **Raw Water Levels** | ✅ | ✅ |
 | **Handle Duplicate Names** | ❌ | ✅ |
