@@ -23,9 +23,9 @@ These addtional attributes are
 
 * **River** - Shows which river this monitoring station is on.
 * **Catchment** - Shows which catchment area this monitoring station resides. 
-* **Highest Recent Level** - The highest water level recorded "recently" (not 100% what the Env agency is basing this on)
+* **Highest Recent Level** - The highest water level recorded "recently" (usually going back to when the station was installed on the river)
 * **Highest Recent Date** - Date of which the above highest water level recorded was.
-* **Typical High/Low Thresholds** - The levels at which the Environmental Agency deem as being high (flooding/imminent) and low.
+* **Typical High/Low Thresholds** - The levels at which the Environment Agency deem as being high (flooding/imminent) and low.
 
 ### 3. 🚦 Enhancement: Automated "River Status" Sensor
 
