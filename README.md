@@ -6,6 +6,7 @@ While the original integration provides essential raw data, it could not support
 
 ---
 
+
 ## 🚀 Key Improvements in this Fork
 
 ### 1. 🆔 Fix: Duplicate Station Support
@@ -43,8 +44,8 @@ Both of the entities created (Height & Status) have dynamic icons to give you a 
 * **Status** - Icon will be either a tick (check) if the levels are normal, or an exclamation mark if things are high/low.
 * **Water level** - Icon will display as an upward or downward trending arrow to show you what the current trend based on the last couple of readings is.
 
-
 ---
+
 
 ## 🛠 Why Use This Over the Standard Version?
 
@@ -53,10 +54,11 @@ Both of the entities created (Height & Status) have dynamic icons to give you a 
 | **Raw Water Levels** | ✅ | ✅ |
 | **Handle Duplicate Names** | ❌ | ✅ |
 | **River Status** (Normal/High/Low) | ❌ | ✅ |
-| **Detailed Configuration** | Label Only | Label + Catchment + ID |
-| **Typical Range Attributes** | ❌ | ✅ |
+| **Easier Configuration** | Label Only | Label + Catchment + ID |
+| **Additional Attributes** | ❌ | ✅ |
 
 ---
+
 
 ## ⚙️ Installation & Setup
 
@@ -65,6 +67,7 @@ Both of the entities created (Height & Status) have dynamic icons to give you a 
 3. **Configure:** Go to **Settings > Devices & Services > Add Integration** and search for **eafm enhanced**.
 
 ---
+
 
 ## 🙏 Credits & Acknowledgments
 
@@ -76,11 +79,13 @@ This project is a fork of the core [Environment Agency Flood Gauges](https://www
 
 ---
 
+
 ### 📝 Legal & Disclaimer
 
 This integration is provided for informational purposes only. Data is sourced from the Environment Agency API (Open Government Licence v3.0). **Never rely solely on a smart home integration for life-safety decisions.** Always refer to the official [Check for Flooding](https://check-for-flooding.service.gov.uk/) service.
 
 ---
+
 
 ### Pro Dashboard Tip
 
