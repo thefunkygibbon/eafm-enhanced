@@ -83,6 +83,7 @@ class EafmSensor(SensorEntity):
             "highest_recent": self._station.highest_recent,
             "highest_recent_date": self._station.highest_recent_date,
             "typical_range_high": self._station.stage_scale.get("typicalRangeHigh"),
+            "typical_range_low": self._station.stage_scale.get("typicalRangeLow"),
         }
 
     async def async_update(self):
