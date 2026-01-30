@@ -10,9 +10,9 @@ While the original integration provides essential raw data, it could not support
 
 ### 1. 🆔 Fix: Duplicate Station Support
 
-The original integration struggles with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration will only display one, and it isn't at all clear which it is. 
+The original integration struggles with "Station Shadowing." If two or more stations share the same name (e.g., "The Weir"), the original integration will only display one, and it isn't at all clear which it is. 
 
-* **The EAFME Solution:** I have used unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
+**The solution:** I have used unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
 
 ### 2. 🔍 Enhancement: Each station is created as a 'device' and entities have extra attributes
 
