@@ -10,24 +10,39 @@ While the original integration provides essential raw data, it could not support
 
 ### 1. 🆔 Fix: Duplicate Station Support
 
-The original integration can struggle with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration often only displays one, or fails to list the second.
+The original integration struggles with "Station Shadowing." If two stations share the same name (e.g., "The Weir"), the original integration will only display one, and it isn't at all clear which it is. 
 
-* **The EAFME Solution:** We use unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
+* **The EAFME Solution:** I have used unique RLOI IDs and Catchment names in the selection process. This ensures that every single gauge in the UK is selectable, even if there are 10 others with the same name.  Needless to say that this also makes it much easier to find the station which you are looking for. 
 
-### 2. 🚦 Automated "River Status" Sensor
+### 2. 🔍 Enhancement: Each station is created as a 'device' and entities have extra attributes
 
-We've added a dedicated "Status" entity that categorizes the river's health in real-time:
+I have configured it so that every added station via this integration is created as a 'device' with it's own entities within it.
+On top of this,  the entity for the water level has now got extra attributes which you can use in other aspects of Home Assistant.   
+These addtional attributes are
+
+* **River** - Shows which river this monitoring station is on.
+* **Catchment** - Shows which catchment area this monitoring station resides. 
+* **Highest Recent Level** - The highest water level recorded "recently" (not 100% what the Env agency is basing this on)
+* **Highest Recent Date** - Date of which the above highest water level recorded was.
+* **Typical High/Low Thresholds** - The levels at which the Environmental Agency deem as being high (flooding/imminent) and low.
+
+### 3. 🚦 Enhancement: Automated "River Status" Sensor
+
+Since the API data includes the information for what is typical high and low heights for the water level, I have added a dedicated "Status" entity that calculates and categorizes the river's health in real-time:
 
 * 🟢 **Normal**: Water levels are within the expected seasonal range.
-* 🔴 **High**: Levels have exceeded the typical high threshold for this specific gauge.
+* 🔴 **High**: Levels have exceeded the typical high threshold for this specific gauge. 
 * 🟡 **Low**: Levels are below the typical low threshold.
 
-### 3. 🔍 Deep Metadata Fetching
+With this you can easily create an automation to alert you if your local monitoring station is reporting as "high" as that usually means it is flooding, therefore you can plan alternative routes for travel etc. 
 
-EAFME doesn't just scrape the surface. It follows secondary API links to find "Stage Scale" data, providing you with:
+### 4. ✅❌ Dynamic Icons
 
-* **Typical High/Low Thresholds** (now available as attributes).
-* **Highest Recent Reading** (compare today's level to the last major flood).
+Both of the entities created (Height & Status) have dynamic icons to give you a passing glance of if things are looking good or bad on your monitored station.  
+
+* **Status** - Icon will be either a tick (check) if the levels are normal, or an exclamation mark if things are high/low.
+* **Water level** - Icon will display as an upward or downward trending arrow to show you what the current trend based on the last couple of readings is.
+
 
 ---
 
