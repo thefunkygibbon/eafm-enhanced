@@ -36,7 +36,7 @@ Since the API data includes the information for what is typical high and low hei
 
 With this you can easily create an automation to alert you if your local monitoring station is reporting as "high" as that usually means it is flooding, therefore you can plan alternative routes for travel etc. 
 
-### 4. ✅❌ Dynamic Icons
+### 4. ✅❌ Enhancement: Dynamic Icons
 
 Both of the entities created (Height & Status) have dynamic icons to give you a passing glance of if things are looking good or bad on your monitored station.  
 
