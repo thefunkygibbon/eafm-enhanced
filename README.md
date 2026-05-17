@@ -18,14 +18,20 @@ The original integration struggles with "Station Shadowing." If two or more stat
 ### 2. 🔍 Enhancement: Each station is created as a 'device' and entities have extra attributes
 
 I have configured it so that every added station via this integration is created as a 'device' with it's own entities within it.
-On top of this,  the entity for the water level has now got extra attributes which you can use in other aspects of Home Assistant.   
-These addtional attributes are
+On top of this, the entity for the water level has now got extra attributes which you can use in other aspects of Home Assistant.   
+These additional attributes are
 
 * **River** - Shows which river this monitoring station is on.
 * **Catchment** - Shows which catchment area this monitoring station resides. 
 * **Highest Recent Level** - The highest water level recorded "recently" (usually going back to when the station was installed on the river)
 * **Highest Recent Date** - Date of which the above highest water level recorded was.
 * **Typical High/Low Thresholds** - The levels at which the Environment Agency deem as being high (flooding/imminent) and low.
+* **Highest Ever Level** - The highest water level ever recorded (usually going back to when the station was installed on the river)
+* **Highest Ever Date** - Date of which the above highest water level ever recorded was.
+* **Lowest Ever Level** - The lowest water level ever recorded (usually going back to when the station was installed on the river)
+* **Lowest Ever Date** - Date of which the above lowest water level ever recorded was.
+* **Latitude** - Monitoring station latitude.
+* **Longitude** - Monitoring station longitude.
 
 ### 3. 🚦 Enhancement: Automated "River Status" Sensor
 

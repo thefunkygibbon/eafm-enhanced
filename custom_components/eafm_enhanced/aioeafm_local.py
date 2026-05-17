@@ -55,6 +55,42 @@ class Station:
             return [Measure(m_list)]
         return []
 
+    # add latitude and longitude attributes
+    @property
+    def latitude(self):
+        return self.data.get("lat", 0)
+
+    @property
+    def longitude(self):
+        return self.data.get("long", 0)
+
+    # add maximum recorded value and datetime
+    @property
+    def max_on_record(self):
+        """Get the max reading on record value."""
+        hr = self.stage_scale.get("maxOnRecord", {})
+        return hr.get("value") if isinstance(hr, dict) else None
+
+    @property
+    def max_on_record_date(self):
+        """Get the date/time of the max reading on record."""
+        hr = self.stage_scale.get("maxOnRecord", {})
+        return hr.get("dateTime") if isinstance(hr, dict) else None
+
+    # add minimum recorded value and datetime
+    @property
+    def min_on_record(self):
+        """Get the min reading on record value."""
+        hr = self.stage_scale.get("minOnRecord", {})
+        return hr.get("value") if isinstance(hr, dict) else None
+
+    @property
+    def min_on_record_date(self):
+        """Get the date/time of the min reading on record."""
+        hr = self.stage_scale.get("minOnRecord", {})
+        return hr.get("dateTime") if isinstance(hr, dict) else None
+    
+    
 async def get_stations(session: aiohttp.ClientSession, **kwargs):
     """Get stations. Defaults to status=Active."""
     kwargs.setdefault("status", "Active")

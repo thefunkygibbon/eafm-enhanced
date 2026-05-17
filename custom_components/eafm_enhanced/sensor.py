@@ -74,6 +74,7 @@ class EafmSensor(SensorEntity):
     def native_value(self):
         return self._state
 
+    # add attributes for - max level on record (datetime and value), min level on record (datetime and value), station lat & long
     @property
     def extra_state_attributes(self):
         """Historical data stored in attributes to avoid clutter."""
@@ -84,6 +85,12 @@ class EafmSensor(SensorEntity):
             "highest_recent_date": self._station.highest_recent_date,
             "typical_range_high": self._station.stage_scale.get("typicalRangeHigh"),
             "typical_range_low": self._station.stage_scale.get("typicalRangeLow"),
+            "max_on_record": self._station.max_on_record,
+            "max_on_record_date": self._station.max_on_record_date,
+            "min_on_record": self._station.min_on_record,
+            "min_on_record_date": self._station.min_on_record_date,
+            "latitude": self._station.latitude,
+            "longitude": self._station.longitude,
         }
 
     async def async_update(self):
