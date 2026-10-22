@@ -48,7 +48,9 @@ class EafmConfigFlow(config_entries.ConfigFlow, domain="eafm_enhanced"):
             if station.rloi_id:
                 display_name += f" ({station.rloi_id})"
             
-            stations_dropdown[station.station_reference] = display_name
+            # Key by notation: unlike stationReference it is unique and can
+            # always be looked up directly.
+            stations_dropdown[station.notation] = display_name
         
         sorted_stations = dict(sorted(stations_dropdown.items(), key=lambda item: item[1]))
 
